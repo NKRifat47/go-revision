@@ -1,3 +1,3 @@
-module ecommerc
+module ecommerce
 
 go 1.26.2
