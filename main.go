@@ -7,14 +7,6 @@ import (
 	"strconv"
 )
 
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello World")
-}
-
-func aboutHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "I am Rifat.")
-}
-
 type Product struct {
 	ID    string
 	Name  string
@@ -24,48 +16,19 @@ type Product struct {
 var products []Product
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
-	handelCors(w)
-	handlePreflightRequest(w, r)
-
-	if r.Method != "GET" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	sendData(w, products, 200)
 }
 
 func createProduct(w http.ResponseWriter, r *http.Request) {
-	handelCors(w)
-	handlePreflightRequest(w, r)
-
-	if r.Method == http.MethodPost {
-		var newProduct Product
-		err := json.NewDecoder(r.Body).Decode(&newProduct)
-		if err != nil {
-			http.Error(w, "Invalid request body", http.StatusBadRequest)
-			return
-		}
-		newProduct.ID = strconv.Itoa(len(products) + 1)
-		products = append(products, newProduct)
-		sendData(w, newProduct, 201)
-
-	} else {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	var newProduct Product
+	err := json.NewDecoder(r.Body).Decode(&newProduct)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
 	}
-}
-
-func handelCors(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-}
-
-func handlePreflightRequest(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(200)
-	}
+	newProduct.ID = strconv.Itoa(len(products) + 1)
+	products = append(products, newProduct)
+	sendData(w, newProduct, 201)
 }
 
 func sendData(w http.ResponseWriter, data interface{}, statusCode int) {
@@ -76,14 +39,14 @@ func sendData(w http.ResponseWriter, data interface{}, statusCode int) {
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/hello", helloHandler)
-	mux.HandleFunc("/about", aboutHandler)
 
-	mux.HandleFunc("/products", getProducts)
-	mux.HandleFunc("/createProduct", createProduct)
+	mux.Handle("GET /products", http.HandlerFunc(getProducts))
+	mux.Handle("POST /createProduct", http.HandlerFunc(createProduct))
 
 	fmt.Println("Server is running on port 8080")
-	err := http.ListenAndServe(":8080", mux)
+
+	globalRouter := globalRouter(mux)
+	err := http.ListenAndServe(":8080", globalRouter)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -102,4 +65,24 @@ func init() {
 	}
 
 	products = append(products, prd1, prd2)
+}
+
+func globalRouter(mux *http.ServeMux) http.Handler {
+	handleAllRequests := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(200)
+			return
+		}
+		mux.ServeHTTP(w, r)
+	}
+
+	handler := http.HandlerFunc(handleAllRequests)
+
+	return handler
+
 }
