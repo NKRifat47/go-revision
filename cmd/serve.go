@@ -11,6 +11,10 @@ import (
 func Serve() {
 	mux := http.NewServeMux()
 
+	mux.Handle("GET /", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Go server is Running..."))
+	}))
+
 	mux.Handle("GET /rifat", middleware.Logger(http.HandlerFunc(handlers.Test)))
 
 	mux.Handle("GET /products", middleware.Logger(http.HandlerFunc(handlers.GetProducts)))
@@ -19,7 +23,7 @@ func Serve() {
 
 	globalRouter := global_router.GlobalRouter(mux)
 
-	fmt.Println("Server is running on port 8080")
+	fmt.Println("Server is running on http://localhost:8080")
 
 	err := http.ListenAndServe(":8080", globalRouter)
 	if err != nil {
