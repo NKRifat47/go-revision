@@ -7,19 +7,13 @@ import (
 )
 
 func initRoutes(mux *http.ServeMux, manager *middleware.Manager) {
-	mux.Handle("GET /", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Go server is Running..."))
-	}))
 
 	mux.Handle("GET /products", manager.With(
 		http.HandlerFunc(handlers.GetProducts),
+		middleware.Arekta,
 	))
 
-	mux.Handle("POST /products", manager.With(
-		http.HandlerFunc(handlers.CreateProduct),
-	))
+	mux.Handle("POST /products", http.HandlerFunc(handlers.CreateProduct))
 
-	mux.Handle("GET /products/{productid}", manager.With(
-		http.HandlerFunc(handlers.GetProductByID),
-	))
+	mux.Handle("GET /products/{productid}", http.HandlerFunc(handlers.GetProductByID))
 }
