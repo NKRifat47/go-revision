@@ -8,7 +8,6 @@ type Product struct {
 
 var Productlist []Product
 
-
 func init() {
 	prd1 := Product{
 		ID:    "1",
@@ -23,4 +22,3 @@ func init() {
 
 	Productlist = append(Productlist, prd1, prd2)
 }
-
