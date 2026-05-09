@@ -11,11 +11,7 @@ func Logger(next http.Handler) http.Handler {
 
 		start := time.Now()
 
-		log.Println("Ami logger middleware ami age print hbo .....")
-
 		next.ServeHTTP(w, r)
-
-		log.Println("Ami logger middleware ami seshe print hbo .....")
 
 		duration := time.Since(start)
 
