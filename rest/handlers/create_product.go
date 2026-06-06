@@ -4,9 +4,7 @@ import (
 	"ecommerce/database"
 	"ecommerce/util"
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"strconv"
 )
 
 func CreateProduct(w http.ResponseWriter, r *http.Request) {
@@ -15,12 +13,10 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&newProduct)
 	if err != nil {
-		fmt.Println(err)
-		http.Error(w, "Please give me valid json", 400)
+		util.SendError(w, http.StatusBadRequest, "Please give me valid json")
 		return
 	}
 
-	newProduct.ID = strconv.Itoa(len(database.Productlist) + 1)
-	database.Productlist = append(database.Productlist, newProduct)
-	util.SendData(w, newProduct, 201)
+	product := database.Store(newProduct)
+	util.SendData(w, product, http.StatusCreated)
 }
