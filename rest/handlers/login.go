@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"ecommerce/config"
 	"ecommerce/database"
 	"ecommerce/util"
 	"encoding/json"
@@ -26,6 +27,21 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalis credentisl", http.StatusBadRequest)
 		return
 	}
+
+	cnf := config.GetConfig()
+
+	accessToken, err:= util.CreateJwt(cnf.JwtSecretKey, util.Payload{
+		Sub: usr.ID,
+		FirstName: usr.FirstName,
+		LastName: usr.LastName,
+		Email: usr.Email,
+		IsSopOwner: usr.IsShopOwner,
+	})
+
+	if err != nil{
+	util.SendError(w, http.StatusInternalServerError, "Internal Server Error")
+	return
+	}
 	
-	util.SendData(w, usr, http.StatusCreated)
+	util.SendData(w, accessToken, http.StatusCreated)
 }
