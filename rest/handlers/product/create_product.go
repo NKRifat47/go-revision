@@ -1,26 +1,38 @@
 package product
 
 import (
-	"ecommerce/database"
+	"ecommerce/repo"
 	"ecommerce/util"
 	"encoding/base64"
 	"encoding/json"
 	"net/http"
 )
 
+type ReqCreateProduct struct {
+	Name  string
+	Price float64
+}
+
 func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	
-	var newProduct database.Product
+	var req ReqCreateProduct
 
 	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&newProduct)
+	err := decoder.Decode(&req)
 	if err != nil {
 		util.SendError(w, http.StatusBadRequest, "Please give me valid json")
 		return
 	}
 
-	product := database.Store(newProduct)
-	util.SendData(w, product, http.StatusCreated)
+	product, err := h.productRepo.Create(repo.Product{
+		Name: req.Name,
+		Price: req.Price,
+	})
+	if err != nil {
+		util.SendError(w, http.StatusInternalServerError, "Internal Server Error")
+		return
+	}
+	util.SendData(w, http.StatusCreated, product)
 }
 
 func base64UrlEncode(data []byte) string {
