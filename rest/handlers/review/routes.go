@@ -11,6 +11,5 @@ func (h *Handler)  RegisterRoutes(
 	){
 	mux.Handle("GET /reviews", manager.With(
 		http.HandlerFunc(h.GetReviews),
-		middleware.AuthenticateJWT,
 	))
 }
