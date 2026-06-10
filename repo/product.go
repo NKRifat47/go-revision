@@ -9,7 +9,7 @@ type Product struct {
 type ProductRepo interface {
 	Create(p Product) (*Product, error)
 	Get(productID int) (*Product, error)
-	List() ( []*Product, error)
+	List() ([]*Product, error)
 	Delete(productID int) error
 	Update(product Product) (*Product, error)
 }
@@ -33,7 +33,7 @@ func (r *productRepo) Create(p Product) (*Product, error) {
 
 }
 func (r *productRepo) Get(productID int) (*Product, error) {
-		for _, product := range r.productList {
+	for _, product := range r.productList {
 		if product.ID == productID {
 			return product, nil
 		}
@@ -41,7 +41,7 @@ func (r *productRepo) Get(productID int) (*Product, error) {
 	return nil, nil
 
 }
-func (r *productRepo) List() ( []*Product, error){
+func (r *productRepo) List() ([]*Product, error) {
 	return r.productList, nil
 }
 func (r *productRepo) Delete(productID int) error {
@@ -57,7 +57,7 @@ func (r *productRepo) Delete(productID int) error {
 
 }
 func (r *productRepo) Update(product Product) (*Product, error) {
-		for idx, p := range r.productList {
+	for idx, p := range r.productList {
 		if p.ID == product.ID {
 			r.productList[idx] = &product
 		}
