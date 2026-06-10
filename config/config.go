@@ -10,11 +10,21 @@ import (
 
 var configuration *Config
 
+type DBConfig struct{
+	Host string
+	Port int
+	Name string
+	User string
+	Password string
+	EnableSSLMode bool
+}
+
 type Config struct {
 	Version     string
 	ServiceName string
 	HttpPort    int
 	JwtSecretKey string
+	DB *DBConfig
 }
 
 func LoadConfig() {
@@ -54,11 +64,67 @@ func LoadConfig() {
 		os.Exit(1)
 	}
 
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		fmt.Println("Host is required")
+		os.Exit(1)
+	}
+
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		fmt.Println("Port is required")
+		os.Exit(1)
+	}
+
+	dbPrt, err := strconv.Atoi(port)
+	if err != nil {
+		fmt.Println("DB port must be an integer")
+		os.Exit(1)
+	}
+
+	name := os.Getenv("DB_NAME")
+	if name == "" {
+		fmt.Println("Name is required")
+		os.Exit(1)
+	}
+
+	user := os.Getenv("DB_USER")
+	if user == "" {
+		fmt.Println("DB User is required")
+		os.Exit(1)
+	}
+
+	password := os.Getenv("DB_PASSWORD")
+	if password == "" {
+		fmt.Println("DB Password is required")
+		os.Exit(1)
+	}
+
+	enableSSLModeStr := os.Getenv("DB_ENABLE_SSL_MODE")
+	if enableSSLModeStr == "" {
+		fmt.Println("ENABLE_SSL_MODE is required")
+		os.Exit(1)
+	}
+
+	enableSSLModeBool, err := strconv.ParseBool(enableSSLModeStr)
+	if err != nil {
+		fmt.Println("ENABLE_SSL_MODE must be a boolean (true/false)")
+		os.Exit(1)
+	}
+
 	configuration = &Config{
-		Version:     version,
-		ServiceName: serviceName,
-		HttpPort:    httpPortInt,
+		Version:      version,
+		ServiceName:  serviceName,
+		HttpPort:     httpPortInt,
 		JwtSecretKey: JwtSecretKey,
+		DB: &DBConfig{
+			Host: host,
+			Port: dbPrt,
+			Name: name,
+			User: user,
+			Password: password,
+			EnableSSLMode: enableSSLModeBool,
+		},
 	}
 }
 
