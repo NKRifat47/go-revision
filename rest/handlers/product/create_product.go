@@ -9,8 +9,10 @@ import (
 )
 
 type ReqCreateProduct struct {
-	Name  string
-	Price float64
+	Title       string  `json:"title"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	ImgUrl      string  `json:"imageUrl"`
 }
 
 func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
@@ -25,8 +27,10 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	product, err := h.productRepo.Create(repo.Product{
-		Name: req.Name,
-		Price: req.Price,
+		Title:       req.Title,
+		Description: req.Description,
+		Price:       req.Price,
+		ImgUrl:      req.ImgUrl,
 	})
 	if err != nil {
 		util.SendError(w, http.StatusInternalServerError, "Internal Server Error")

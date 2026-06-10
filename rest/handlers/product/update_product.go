@@ -9,8 +9,10 @@ import (
 )
 
 type ReqUpdateProduct struct {
-	Name  string
-	Price float64
+	Title       string  `json:"title"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	ImgUrl      string  `json:"imageUrl"`
 }
 
 
@@ -32,11 +34,13 @@ func (h *Handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = h.productRepo.Update(repo.Product{
-		ID: pId,
-		Name: req.Name,
-		Price: req.Price,
+		ID:          pId,
+		Title:       req.Title,
+		Description: req.Description,
+		Price:       req.Price,
+		ImgUrl:      req.ImgUrl,
 	})
-	if err !=nil {
+	if err != nil {
 		util.SendError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
