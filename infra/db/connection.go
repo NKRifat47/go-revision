@@ -11,6 +11,7 @@ func GetConnectionString() string{
 	return "user=postgres password=admin123 host=localhost port=5432 dbname=ecommerce sslmode=disable"
 }
 
+
 func NewConnection() (*sqlx.DB, error){
 	dbSource := GetConnectionString()
 	dbCon, err:= sqlx.Connect("postgres", dbSource)
