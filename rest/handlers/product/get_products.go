@@ -6,7 +6,7 @@ import (
 )
 
 func (h *Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
-	productlist, err := h.productRepo.List()
+	productlist, err := h.svc.List()
 	if err != nil{
 		util.SendError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
