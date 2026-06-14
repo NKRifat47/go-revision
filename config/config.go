@@ -10,21 +10,21 @@ import (
 
 var configuration *Config
 
-type DBConfig struct{
-	Host string
-	Port int
-	Name string
-	User string
-	Password string
+type DBConfig struct {
+	Host          string
+	Port          int
+	Name          string
+	User          string
+	Password      string
 	EnableSSLMode bool
 }
 
 type Config struct {
-	Version     string
-	ServiceName string
-	HttpPort    int
+	Version      string
+	ServiceName  string
+	HttpPort     int
 	JwtSecretKey string
-	DB *DBConfig
+	DB           *DBConfig
 }
 
 func LoadConfig() {
@@ -118,11 +118,11 @@ func LoadConfig() {
 		HttpPort:     httpPortInt,
 		JwtSecretKey: JwtSecretKey,
 		DB: &DBConfig{
-			Host: host,
-			Port: dbPrt,
-			Name: name,
-			User: user,
-			Password: password,
+			Host:          host,
+			Port:          dbPrt,
+			Name:          name,
+			User:          user,
+			Password:      password,
 			EnableSSLMode: enableSSLModeBool,
 		},
 	}

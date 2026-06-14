@@ -7,11 +7,11 @@ import (
 )
 
 type ReqLogin struct {
-	Email string `json:"email"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-func (h *Handler)Login(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	var req ReqLogin
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&req)
@@ -21,23 +21,23 @@ func (h *Handler)Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	usr, err := h.svc.Find(req.Email, req.Password)
-	if err !=nil {
+	if err != nil {
 		util.SendError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
-	accessToken, err:= util.CreateJwt(h.cnf.JwtSecretKey, util.Payload{
-		Sub: usr.ID,
-		FirstName: usr.FirstName,
-		LastName: usr.LastName,
-		Email: usr.Email,
+	accessToken, err := util.CreateJwt(h.cnf.JwtSecretKey, util.Payload{
+		Sub:        usr.ID,
+		FirstName:  usr.FirstName,
+		LastName:   usr.LastName,
+		Email:      usr.Email,
 		IsSopOwner: usr.IsShopOwner,
 	})
 
-	if err != nil{
-	util.SendError(w, http.StatusInternalServerError, "Internal Server Error")
-	return
+	if err != nil {
+		util.SendError(w, http.StatusInternalServerError, "Internal Server Error")
+		return
 	}
-	
+
 	util.SendData(w, http.StatusCreated, accessToken)
 }

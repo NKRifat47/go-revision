@@ -6,15 +6,15 @@ import (
 
 type Handler struct {
 	middlewares *middleware.Middlewares
-	svc Service
+	svc         Service
 }
 
 func NewHandler(
 	middlewares *middleware.Middlewares,
 	svc Service,
-	) *Handler {
+) *Handler {
 	return &Handler{
 		middlewares: middlewares,
-		svc: svc,
+		svc:         svc,
 	}
 }

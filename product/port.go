@@ -5,7 +5,7 @@ import (
 	prdctHndlr "ecommerce/rest/handlers/product"
 )
 
-type Service interface{
+type Service interface {
 	prdctHndlr.Service
 }
 

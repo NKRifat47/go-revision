@@ -17,7 +17,7 @@ func (h *Handler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	product, err := h.svc.Get(pId)
-	if err !=nil {
+	if err != nil {
 		util.SendError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}

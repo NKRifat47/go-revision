@@ -18,20 +18,20 @@ func Serve() {
 	cnf := config.GetConfig()
 
 	dbCon, err := db.NewConnection(cnf.DB)
-	if err !=nil{
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	err = db.MigrateDB(dbCon, "./migrations")
-	if err !=nil{
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	//Repos
 	productRepo := repo.NewProductRepo(dbCon)
-	userRepo:= repo.NewUserRepo(dbCon)
+	userRepo := repo.NewUserRepo(dbCon)
 
 	//Domains
 	usrSvc := user.NewService(userRepo)
@@ -43,9 +43,9 @@ func Serve() {
 	userHandler := usrHandler.NewHandler(cnf, usrSvc)
 
 	server := rest.NewServer(
-		cnf, 
-		productHandler, 
-		userHandler, 
+		cnf,
+		productHandler,
+		userHandler,
 	)
 	server.Start()
 }

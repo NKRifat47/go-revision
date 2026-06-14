@@ -16,7 +16,7 @@ type ReqCreateProduct struct {
 }
 
 func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
-	
+
 	var req ReqCreateProduct
 
 	decoder := json.NewDecoder(r.Body)

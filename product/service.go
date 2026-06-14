@@ -9,5 +9,3 @@ func NewService(prdctRepo ProductRepo) Service {
 		prdctRepo: prdctRepo,
 	}
 }
-
-

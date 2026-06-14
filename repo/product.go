@@ -65,7 +65,7 @@ func (r *productRepo) Get(id int) (*domain.Product, error) {
 
 	err := r.db.Get(&prd, query, id)
 	if err != nil {
-		if err == sql.ErrNoRows{
+		if err == sql.ErrNoRows {
 			return nil, nil
 		}
 		return nil, err

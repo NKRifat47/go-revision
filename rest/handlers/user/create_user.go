@@ -23,7 +23,7 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Error decoding user JSON:", err)
 		util.SendError(w, http.StatusBadRequest, "Invalid Request Data")
-		return                                       
+		return
 	}
 
 	usr, err := h.svc.Create(domain.User{
@@ -33,7 +33,7 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		Password:    req.Password,
 		IsShopOwner: req.IsShopOwner,
 	})
-	if err !=nil {
+	if err != nil {
 		util.SendError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}

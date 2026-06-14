@@ -11,21 +11,21 @@ import (
 	"strconv"
 )
 
-type Server struct{
-	cnf *config.Config
-	productHandler  *product.Handler
-	userHandler     *user.Handler
- }
+type Server struct {
+	cnf            *config.Config
+	productHandler *product.Handler
+	userHandler    *user.Handler
+}
 
-func NewServer (
+func NewServer(
 	cnf *config.Config,
 	productHandler *product.Handler,
 	userHandler *user.Handler,
-	) *Server{
+) *Server {
 	return &Server{
-		cnf: cnf,
+		cnf:            cnf,
 		productHandler: productHandler,
-		userHandler: userHandler,
+		userHandler:    userHandler,
 	}
 }
 

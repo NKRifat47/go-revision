@@ -20,9 +20,9 @@ func GetConnectionString(cnf *config.DBConfig) string {
 	)
 }
 
-func NewConnection(cnf *config.DBConfig) (*sqlx.DB, error){
+func NewConnection(cnf *config.DBConfig) (*sqlx.DB, error) {
 	dbSource := GetConnectionString(cnf)
-	dbCon, err:= sqlx.Connect("postgres", dbSource)
+	dbCon, err := sqlx.Connect("postgres", dbSource)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err

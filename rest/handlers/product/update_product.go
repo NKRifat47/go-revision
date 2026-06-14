@@ -15,7 +15,6 @@ type ReqUpdateProduct struct {
 	ImgUrl      string  `json:"imageUrl"`
 }
 
-
 func (h *Handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	productID := r.PathValue("id")
 	pId, err := strconv.Atoi(productID)
