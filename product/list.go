@@ -1,7 +1,9 @@
 package product
 
-import "ecommerce/domain"
+import (
+	"ecommerce/domain"
+)
 
-func (svc *service) List() ([]*domain.Product, error) {
-	return svc.prdctRepo.List()
+func (svc *service) List(page, limit int64) ([]*domain.Product, error) {
+	return svc.prdctRepo.List(page, limit)
 }
